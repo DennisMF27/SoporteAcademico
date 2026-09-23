@@ -1,4 +1,6 @@
-﻿Console.WriteLine("==========================================");
+﻿const int longitudMinimaCodigo = 6;
+
+Console.WriteLine("==========================================");
 Console.WriteLine(" SISTEMA DE SOPORTE ACADÉMICO");
 Console.WriteLine("==========================================");
 
@@ -6,6 +8,12 @@ Console.WriteLine("\nREGISTRO DE SOLICITUD");
 
 Console.Write("Código del estudiante: ");
 string codigoEstudiante = Console.ReadLine() ?? "";
+
+if (!ValidarCodigoEstudiante(codigoEstudiante, longitudMinimaCodigo))
+{
+    Console.WriteLine("Error: el código no puede estar vacío y debe tener al menos 6 caracteres.");
+    return;
+}
 
 Console.Write("Nombre del estudiante: ");
 string nombre = Console.ReadLine() ?? "";
@@ -23,3 +31,9 @@ Console.WriteLine($"Código: {codigoEstudiante}");
 Console.WriteLine($"Nombre: {nombre}");
 Console.WriteLine($"Tipo de consulta: {tipoConsulta}");
 Console.WriteLine($"Descripción: {descripcion}");
+
+static bool ValidarCodigoEstudiante(string codigo, int longitudMinima)
+{
+    return !string.IsNullOrWhiteSpace(codigo) &&
+           codigo.Length >= longitudMinima;
+}
