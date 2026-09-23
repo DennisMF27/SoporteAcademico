@@ -21,6 +21,13 @@ string nombre = Console.ReadLine() ?? "";
 Console.Write("Tipo de consulta: ");
 string tipoConsulta = Console.ReadLine() ?? "";
 
+if (!ValidarTipoConsulta(tipoConsulta))
+{
+    Console.WriteLine("Error: tipo de consulta no válido.");
+    Console.WriteLine("Tipos permitidos: matricula, pagos, constancia, plataforma u otro.");
+    return;
+}
+
 Console.Write("Descripción de la solicitud: ");
 string descripcion = Console.ReadLine() ?? "";
 
@@ -36,4 +43,17 @@ static bool ValidarCodigoEstudiante(string codigo, int longitudMinima)
 {
     return !string.IsNullOrWhiteSpace(codigo) &&
            codigo.Length >= longitudMinima;
+}
+static bool ValidarTipoConsulta(string tipoConsulta)
+{
+    string[] tiposPermitidos =
+    {
+        "matricula",
+        "pagos",
+        "constancia",
+        "plataforma",
+        "otro"
+    };
+
+    return tiposPermitidos.Contains(tipoConsulta.ToLower());
 }
