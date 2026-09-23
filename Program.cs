@@ -1,62 +1,87 @@
-﻿const int longitudMinimaCodigo = 6;
+﻿
+const int longitudMinimaCodigo = 6;
+int solicitudesRegistradas = 0;
 
 Console.WriteLine("==========================================");
 Console.WriteLine(" SISTEMA DE SOPORTE ACADÉMICO");
 Console.WriteLine("==========================================");
 
-MostrarMenu();
+bool continuar = true;
 
-Console.WriteLine("\nREGISTRO DE SOLICITUD");
-
-Console.Write("Código del estudiante: ");
-string codigoEstudiante = Console.ReadLine() ?? "";
-
-if (!ValidarCodigoEstudiante(codigoEstudiante, longitudMinimaCodigo))
+while (continuar)
 {
-    Console.WriteLine("Error: el código no puede estar vacío y debe tener al menos 6 caracteres.");
-    return;
+    MostrarMenu();
+
+    Console.Write("Seleccione una opción: ");
+    string opcion = Console.ReadLine() ?? "";
+
+    if (opcion == "1")
+    {
+        Console.WriteLine("\nREGISTRO DE SOLICITUD");
+
+        Console.Write("Código del estudiante: ");
+        string codigo = Console.ReadLine() ?? "";
+
+        if (!ValidarCodigoEstudiante(codigo, longitudMinimaCodigo))
+        {
+            Console.WriteLine("Error: el código debe tener al menos 6 caracteres.");
+            continue;
+        }
+
+        Console.Write("Nombre del estudiante: ");
+        string nombre = Console.ReadLine() ?? "";
+
+        if (!ValidarTextoObligatorio(nombre))
+        {
+            Console.WriteLine("Error: el nombre es obligatorio.");
+            continue;
+        }
+
+        Console.Write("Tipo de consulta: ");
+        string tipo = Console.ReadLine() ?? "";
+
+        if (!ValidarTipoConsulta(tipo))
+        {
+            Console.WriteLine("Error: tipo de consulta no válido.");
+            continue;
+        }
+
+        Console.Write("Descripción: ");
+        string descripcion = Console.ReadLine() ?? "";
+
+        if (!ValidarTextoObligatorio(descripcion))
+        {
+            Console.WriteLine("Error: la descripción es obligatoria.");
+            continue;
+        }
+
+        string prioridad = AsignarPrioridad(tipo);
+
+        MostrarResumen(
+            codigo,
+            nombre,
+            tipo,
+            descripcion,
+            prioridad
+        );
+
+        solicitudesRegistradas++;
+    }
+    else if (opcion == "2")
+    {
+        continuar = false;
+    }
+    else
+    {
+        Console.WriteLine("Opción no válida. Seleccione 1 o 2.");
+    }
 }
 
-Console.Write("Nombre del estudiante: ");
-string nombre = Console.ReadLine() ?? "";
-
-if (!ValidarTextoObligatorio(nombre))
-{
-    Console.WriteLine("Error: el nombre del estudiante es obligatorio.");
-    return;
-}
-
-Console.Write("Tipo de consulta: ");
-string tipoConsulta = Console.ReadLine() ?? "";
-
-if (!ValidarTipoConsulta(tipoConsulta))
-{
-    Console.WriteLine("Error: tipo de consulta no válido.");
-    Console.WriteLine("Tipos permitidos: matricula, pagos, constancia, plataforma u otro.");
-    return;
-}
-
-Console.Write("Descripción de la solicitud: ");
-string descripcion = Console.ReadLine() ?? "";
-
-if (!ValidarTextoObligatorio(descripcion))
-{
-    Console.WriteLine("Error: la descripción de la solicitud es obligatoria.");
-    return;
-}
-
-string prioridad = AsignarPrioridad(tipoConsulta);
-
-MostrarResumen(
-    codigoEstudiante,
-    nombre,
-    tipoConsulta,
-    descripcion,
-    prioridad
-);
+Console.WriteLine($"\nTotal de solicitudes registradas: {solicitudesRegistradas}");
+Console.WriteLine("Programa finalizado.");
 
 
-// R2: Valida el código del estudiante.
+// R2: Validación del código.
 static bool ValidarCodigoEstudiante(string codigo, int longitudMinima)
 {
     return !string.IsNullOrWhiteSpace(codigo) &&
@@ -64,7 +89,7 @@ static bool ValidarCodigoEstudiante(string codigo, int longitudMinima)
 }
 
 
-// R3: Valida el tipo de consulta.
+// R3: Validación del tipo de consulta.
 static bool ValidarTipoConsulta(string tipoConsulta)
 {
     string[] tiposPermitidos =
@@ -76,14 +101,16 @@ static bool ValidarTipoConsulta(string tipoConsulta)
         "otro"
     };
 
-    return tiposPermitidos.Contains(tipoConsulta.ToLower());
+    return tiposPermitidos.Contains(
+        tipoConsulta.Trim().ToLower()
+    );
 }
 
 
-// R4: Muestra el menú principal.
+// R4: Menú principal.
 static void MostrarMenu()
 {
-    Console.WriteLine("==========================================");
+    Console.WriteLine("\n==========================================");
     Console.WriteLine("       SOPORTE ACADÉMICO");
     Console.WriteLine("==========================================");
     Console.WriteLine("1. Registrar solicitud");
@@ -92,32 +119,29 @@ static void MostrarMenu()
 }
 
 
-// R5: Asigna la prioridad según el tipo de consulta.
+// R5: Asignación de prioridad.
 static string AsignarPrioridad(string tipoConsulta)
 {
-    if (tipoConsulta.ToLower() == "matricula" ||
-        tipoConsulta.ToLower() == "pagos")
-    {
-        return "Alta";
-    }
+    string tipo = tipoConsulta.Trim().ToLower();
 
-    if (tipoConsulta.ToLower() == "constancia")
-    {
+    if (tipo == "matricula" || tipo == "pagos")
+        return "Alta";
+
+    if (tipo == "constancia")
         return "Media";
-    }
 
     return "Baja";
 }
 
 
-// R6: Valida que un texto obligatorio no esté vacío.
+// R6: Validación de texto obligatorio.
 static bool ValidarTextoObligatorio(string texto)
 {
     return !string.IsNullOrWhiteSpace(texto);
 }
 
 
-// R7 y R8: Muestra el resumen usando parámetros.
+// R7 y R8: Resumen mediante parámetros.
 static void MostrarResumen(
     string codigo,
     string nombre,
@@ -134,7 +158,3 @@ static void MostrarResumen(
     Console.WriteLine($"Descripción: {descripcion}");
     Console.WriteLine($"Prioridad: {prioridad}");
 }
-
-
-// R9: Las variables se mantienen dentro del alcance
-// donde son necesarias y los datos se pasan mediante parámetros.
