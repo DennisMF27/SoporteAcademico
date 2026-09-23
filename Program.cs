@@ -32,6 +32,7 @@ if (!ValidarTipoConsulta(tipoConsulta))
 
 Console.Write("Descripción de la solicitud: ");
 string descripcion = Console.ReadLine() ?? "";
+string prioridad = AsignarPrioridad(tipoConsulta);
 
 Console.WriteLine("\n------------------------------------------");
 Console.WriteLine("SOLICITUD REGISTRADA");
@@ -40,6 +41,7 @@ Console.WriteLine($"Código: {codigoEstudiante}");
 Console.WriteLine($"Nombre: {nombre}");
 Console.WriteLine($"Tipo de consulta: {tipoConsulta}");
 Console.WriteLine($"Descripción: {descripcion}");
+Console.WriteLine($"Prioridad: {prioridad}");
 
 static bool ValidarCodigoEstudiante(string codigo, int longitudMinima)
 {
@@ -58,6 +60,21 @@ static bool ValidarTipoConsulta(string tipoConsulta)
     };
 
     return tiposPermitidos.Contains(tipoConsulta.ToLower());
+}
+static string AsignarPrioridad(string tipoConsulta)
+{
+    if (tipoConsulta.ToLower() == "matricula" ||
+        tipoConsulta.ToLower() == "pagos")
+    {
+        return "Alta";
+    }
+
+    if (tipoConsulta.ToLower() == "constancia")
+    {
+        return "Media";
+    }
+
+    return "Baja";
 }
 static void MostrarMenu()
 {
