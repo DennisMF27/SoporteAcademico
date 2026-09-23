@@ -4,6 +4,8 @@ Console.WriteLine("==========================================");
 Console.WriteLine(" SISTEMA DE SOPORTE ACADÉMICO");
 Console.WriteLine("==========================================");
 
+MostrarMenu();
+
 Console.WriteLine("\nREGISTRO DE SOLICITUD");
 
 Console.Write("Código del estudiante: ");
@@ -56,4 +58,13 @@ static bool ValidarTipoConsulta(string tipoConsulta)
     };
 
     return tiposPermitidos.Contains(tipoConsulta.ToLower());
+}
+static void MostrarMenu()
+{
+    Console.WriteLine("==========================================");
+    Console.WriteLine("       SOPORTE ACADÉMICO");
+    Console.WriteLine("==========================================");
+    Console.WriteLine("1. Registrar solicitud");
+    Console.WriteLine("2. Salir");
+    Console.WriteLine("==========================================");
 }
